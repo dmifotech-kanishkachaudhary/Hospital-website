@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { API } from "../../config";
 import "./AppointmentDetails.css";
 
 function AppointmentDetails() {
@@ -19,7 +20,7 @@ function AppointmentDetails() {
       setError("");
 
       const response = await fetch(
-        `http://localhost:5000/api/appointments/${id}`,
+        `${API}/api/appointments/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -59,7 +60,7 @@ function AppointmentDetails() {
       setError("");
 
       const response = await fetch(
-        `http://localhost:5000/api/appointments/${id}/status`,
+        `${API}/api/appointments/${id}/status`,
         {
           method: "PATCH",
           headers: {

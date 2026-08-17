@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API } from "../../config";
 import "./AdminAppointments.css";
 
 function Appointments() {
@@ -34,8 +35,8 @@ function Appointments() {
       const query = params.toString();
 
       const url = query
-        ? `http://localhost:5000/api/appointments?${query}`
-        : "http://localhost:5000/api/appointments";
+        ? `${API}/api/appointments?${query}`
+        : `${API}/api/appointments`;
 
       const response = await fetch(url, {
         headers: {

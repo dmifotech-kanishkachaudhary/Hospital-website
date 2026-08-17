@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API } from "../../config";
 import "./BookAppointment.css";
 
 const loadRazorpay = () => {
@@ -37,7 +38,7 @@ function BookAppointment() {
     const fetchDoctors = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/doctors",
+          `${API}/api/doctors`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -109,7 +110,7 @@ function BookAppointment() {
 
 if (TEST_MODE) {
   const res = await fetch(
-    "http://localhost:5000/api/appointments",
+    `${API}/api/appointments`,
     {
       method: "POST",
       headers: {
@@ -138,7 +139,7 @@ if (TEST_MODE) {
 
     // 1. Create Razorpay Order
     const orderRes = await fetch(
-      "http://localhost:5000/api/payment/create-order",
+      `${API}/api/payment/create-order`,
       {
         method: "POST",
         headers: {
@@ -170,7 +171,7 @@ if (TEST_MODE) {
       handler: async function (response) {
         try {
           const verifyRes = await fetch(
-            "http://localhost:5000/api/payment/verify",
+            `${API}/api/payment/verify`,
             {
               method: "POST",
 

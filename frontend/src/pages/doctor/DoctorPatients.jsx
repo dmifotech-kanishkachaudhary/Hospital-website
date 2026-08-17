@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API } from "../../config";
 import "../../styles/doctor.css";
 
 function DoctorPatients() {
@@ -17,7 +18,7 @@ function DoctorPatients() {
   const loadPatients = async () => {
     try {
       const res = await fetch(
-        "http://localhost:5000/api/doctor/patients",
+        `${API}/api/doctor/patients`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

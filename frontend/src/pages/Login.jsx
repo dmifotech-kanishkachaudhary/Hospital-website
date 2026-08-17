@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API } from "../config";
 import "./Login.css";
 
 function Login() {
@@ -55,7 +56,7 @@ function Login() {
 
       const response =
         await axios.post(
-          "http://localhost:5000/api/auth/login",
+          `${API}/api/auth/login`,
           {
             email,
             password,
@@ -121,7 +122,7 @@ function Login() {
 
       const response =
         await axios.post(
-          "http://localhost:5000/api/auth/send-otp",
+          `${API}/api/auth/send-otp`,
           {
             email,
           }
@@ -166,7 +167,7 @@ function Login() {
 
       const response =
         await axios.post(
-          "http://localhost:5000/api/auth/verify-otp",
+          `${API}/api/auth/verify-otp`,
           {
             email,
             otp,

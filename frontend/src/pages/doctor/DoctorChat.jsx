@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
+import { API } from "../../config";
 import "../../styles/doctor.css";
 
 function DoctorChat() {
@@ -32,7 +33,7 @@ function DoctorChat() {
   // ===================================
 
   useEffect(() => {
-    socket.current = io("http://localhost:5000");
+    socket.current = io(API);
 
     if (doctor?.user) {
       socket.current.emit("register", doctor.user);
@@ -81,7 +82,7 @@ function DoctorChat() {
 
   const loadWaitingChats = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/chat/waiting", {
+      const res = await fetch(`${API}/api/chat/waiting`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -103,7 +104,7 @@ function DoctorChat() {
 
   const loadActiveChats = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/chat/active", {
+      const res = await fetch(`${API}/api/chat/active`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -126,7 +127,7 @@ function DoctorChat() {
   const loadMessages = async (chatId) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/chat/${chatId}/messages`,
+        `${API}/api/chat/${chatId}/messages`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -151,7 +152,7 @@ function DoctorChat() {
   const joinChat = async (chat) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/chat/join/${chat._id}`,
+        `${API}/api/chat/join/${chat._id}`,
         {
           method: "POST",
           headers: {
@@ -196,7 +197,7 @@ function DoctorChat() {
       setMessage("");
 
       const res = await fetch(
-        "http://localhost:5000/api/chat/doctor-message",
+        `${API}/api/chat/doctor-message`,
         {
           method: "POST",
           headers: {
@@ -232,7 +233,7 @@ function DoctorChat() {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/chat/end/${selectedChat._id}`,
+        `${API}/api/chat/end/${selectedChat._id}`,
         {
           method: "PUT",
           headers: {

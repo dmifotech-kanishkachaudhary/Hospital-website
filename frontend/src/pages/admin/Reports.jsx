@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API } from "../../config";
 import "./Reports.css";
 
 function Reports() {
@@ -19,7 +20,7 @@ function Reports() {
       setLoading(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/reports/all",
+        `${API}/api/reports/all`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

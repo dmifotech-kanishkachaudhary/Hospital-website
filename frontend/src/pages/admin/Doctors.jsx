@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API } from "../../config";
 import "./Doctors.css";
 
 function Doctors() {
@@ -20,10 +21,10 @@ function Doctors() {
       setError("");
 
       const url = searchValue.trim()
-        ? `http://localhost:5000/api/doctors?search=${encodeURIComponent(
+        ? `${API}/api/doctors?search=${encodeURIComponent(
             searchValue.trim()
           )}`
-        : "http://localhost:5000/api/doctors";
+        : `${API}/api/doctors`;
 
       const response = await fetch(url, {
         headers: {
@@ -75,7 +76,7 @@ function Doctors() {
   try {
 
     const response = await fetch(
-      `http://localhost:5000/api/doctors/${doctorId}/${action}`,
+      `${API}/api/doctors/${doctorId}/${action}`,
       {
         method: "PUT",
         headers: {

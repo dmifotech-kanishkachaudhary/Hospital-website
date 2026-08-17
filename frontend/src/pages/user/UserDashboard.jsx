@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { API } from "../../config";
 import "./UserDashboard.css";
 
 function UserDashboard() {
@@ -12,7 +13,7 @@ function UserDashboard() {
     const fetchReports = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/reports/my",
+          `${API}/api/reports/my`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

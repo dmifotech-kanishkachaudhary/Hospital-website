@@ -1,9 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { API } from "../../config";
 import "./Chat.css";
 import { io } from "socket.io-client";
 
-const API_URL = "http://localhost:5000";
+const API_URL = API;
 
 function UserChat() {
   const navigate = useNavigate();

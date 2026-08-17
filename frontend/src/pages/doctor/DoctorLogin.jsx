@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API } from "../../config";
 import "../../styles/doctor.css";
 
 function DoctorLogin() {
@@ -29,7 +30,7 @@ function DoctorLogin() {
 
     try{
 
-      const res=await fetch("http://localhost:5000/api/doctors/login", {
+      const res=await fetch(`${API}/api/doctors/login`, {
         method:"POST",
         headers:{
           "Content-Type":"application/json"

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API } from "../../config";
 import "../Register.css";
 
 function DoctorRegister() {
@@ -37,7 +38,7 @@ function DoctorRegister() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/doctors/register",
+        `${API}/api/doctors/register`,
         formData
       );
 

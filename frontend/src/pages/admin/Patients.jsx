@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API } from "../../config";
 import "./Patients.css";
 
 function Patients() {
@@ -19,10 +20,10 @@ function Patients() {
 
       const url =
         searchValue.trim()
-          ? `http://localhost:5000/api/auth/patients?search=${encodeURIComponent(
+          ? `${API}/api/auth/patients?search=${encodeURIComponent(
               searchValue.trim()
             )}`
-          : "http://localhost:5000/api/auth/patients";
+          : `${API}/api/auth/patients`;
 
       const response = await fetch(url, {
         headers: {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API } from "../../config";
 import "./UploadReport.css";
 
 function UploadReport() {
@@ -21,7 +22,7 @@ function UploadReport() {
     const checkProcessingReport = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/reports/my",
+          `${API}/api/reports/my`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -95,7 +96,7 @@ function UploadReport() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/reports/upload",
+        `${API}/api/reports/upload`,
         {
           method: "POST",
           headers: {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { API } from "../../config";
 import "./PatientDetails.css";
 
 function PatientDetails() {
@@ -21,7 +22,7 @@ function PatientDetails() {
         setError("");
 
         const response = await fetch(
-          `http://localhost:5000/api/auth/patients/${encodeURIComponent(id)}`,
+          `${API}/api/auth/patients/${encodeURIComponent(id)}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

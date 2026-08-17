@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API } from "../../config";
 import "../../styles/doctor.css";
 
 function DoctorAppointments() {
@@ -20,7 +21,7 @@ function DoctorAppointments() {
     try {
 
       const res = await fetch(
-        "http://localhost:5000/api/doctor/appointments",
+        `${API}/api/doctor/appointments`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -49,7 +50,7 @@ function DoctorAppointments() {
     try {
 
       const res = await fetch(
-        `http://localhost:5000/api/doctor/appointments/${id}`,
+        `${API}/api/doctor/appointments/${id}`,
         {
           method: "PUT",
           headers: {

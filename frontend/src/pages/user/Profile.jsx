@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { API } from "../../config";
 import "./Profile.css";
 
 function Profile() {
@@ -48,7 +49,7 @@ function Profile() {
           localStorage.getItem("token");
 
         const response = await fetch(
-          "http://localhost:5000/api/auth/profile",
+          `${API}/api/auth/profile`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -152,7 +153,7 @@ function Profile() {
         localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:5000/api/auth/profile",
+        `${API}/api/auth/profile`,
         {
           method: "PUT",
 

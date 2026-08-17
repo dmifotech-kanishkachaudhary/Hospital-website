@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { API } from "../../config";
 import "./ReportDetails.css";
 import AnalysisView from "../../components/AnalysisView";
 
@@ -15,7 +16,7 @@ function ReportDetails() {
     const fetchReport = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/reports/${id}`,
+          `${API}/api/reports/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

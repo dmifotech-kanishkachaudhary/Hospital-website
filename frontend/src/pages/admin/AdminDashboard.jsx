@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API } from "../../config";
 import "./AdminDashboard.css";
 
 
@@ -46,7 +47,7 @@ function AdminDashboard() {
       setLoadingAppointments(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/appointments",
+        `${API}/api/appointments`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -80,7 +81,7 @@ function AdminDashboard() {
       setLoadingReports(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/reports/all",
+        `${API}/api/reports/all`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -114,7 +115,7 @@ function AdminDashboard() {
       setLoadingDoctors(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/doctors",
+        `${API}/api/doctors`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -148,7 +149,7 @@ function AdminDashboard() {
       setLoadingPatients(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/auth/patients",
+        `${API}/api/auth/patients`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -237,7 +238,7 @@ function AdminDashboard() {
   ) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/appointments/${appointmentId}/status`,
+        `${API}/api/appointments/${appointmentId}/status`,
         {
           method: "PATCH",
 
