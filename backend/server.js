@@ -64,7 +64,7 @@ app.get("/", (req, res) => {
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://city-hospitall.netlify.app/"
+  "https://city-hospitall.netlify.app"
 ];
 
 app.use(
