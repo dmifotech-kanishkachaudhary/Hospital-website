@@ -1,0 +1,571 @@
+.appointment-details-page {
+  min-height: 100vh;
+  background: #f7f0e4;
+  color: #302a24;
+}
+
+
+/* ================= NAVBAR ================= */
+
+.appointment-details-navbar {
+  height: 78px;
+  padding: 0 6%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #fffdf9;
+  border-bottom: 1px solid #e5dacb;
+
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.appointment-details-logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  text-decoration: none;
+  color: #302a24;
+}
+
+.appointment-details-logo > span {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  background: #70845f;
+  color: white;
+
+  font-size: 21px;
+}
+
+.appointment-details-logo strong {
+  display: block;
+  font-size: 16px;
+}
+
+.appointment-details-logo small {
+  display: block;
+  margin-top: 2px;
+
+  color: #8b7d70;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.appointment-details-nav {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  background: #f3ede3;
+  padding: 5px;
+
+  border-radius: 28px;
+}
+
+.appointment-details-nav a {
+  padding: 9px 13px;
+
+  border-radius: 20px;
+
+  text-decoration: none;
+
+  color: #665b51;
+
+  font-size: 12px;
+}
+
+.appointment-details-nav a:hover {
+  background: #fffdf9;
+  color: #70845f;
+}
+
+.appointment-details-nav a.active {
+  background: #70845f;
+  color: white;
+}
+
+.appointment-details-logout {
+  border: none;
+  background: transparent;
+
+  color: #75685d;
+
+  padding: 8px 12px;
+  border-radius: 18px;
+
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.appointment-details-logout:hover {
+  background: #eee5d8;
+  color: #3c342d;
+}
+
+
+/* ================= CONTAINER ================= */
+
+.appointment-details-container {
+  max-width: 1100px;
+  margin: auto;
+
+  padding: 40px 30px 80px;
+}
+
+
+/* ================= BACK ================= */
+
+.appointment-back-link {
+  display: inline-block;
+
+  margin-bottom: 30px;
+
+  text-decoration: none;
+
+  color: #5d7551;
+
+  font-size: 13px;
+}
+
+
+/* ================= HEADER ================= */
+
+.appointment-details-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 30px;
+}
+
+.appointment-details-header > div > span {
+  color: #70845f;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 3px;
+}
+
+.appointment-details-header h1 {
+  margin: 10px 0 7px;
+
+  font-size: 40px;
+}
+
+.appointment-details-header p {
+  margin: 0;
+
+  color: #786d63;
+
+  font-size: 14px;
+}
+
+.appointment-detail-status {
+  padding: 9px 15px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.appointment-detail-status.pending {
+  background: #f4ead3;
+  color: #9a742d;
+}
+
+.appointment-detail-status.confirmed {
+  background: #e3eadc;
+  color: #557048;
+}
+
+.appointment-detail-status.completed {
+  background: #dfe8ed;
+  color: #526c7a;
+}
+
+.appointment-detail-status.cancelled {
+  background: #f3dddd;
+  color: #a44b4b;
+}
+
+
+/* ================= COMMON CARD ================= */
+
+.appointment-info-card,
+.appointment-person-card,
+.appointment-status-card {
+  background: #fffdf9;
+
+  border: 1px solid #e5dac9;
+
+  border-radius: 22px;
+
+  padding: 30px;
+
+  margin-bottom: 20px;
+}
+
+
+/* ================= SECTION HEADING ================= */
+
+.appointment-section-heading > span,
+.appointment-person-header span,
+.appointment-status-card > div:first-child > span {
+  color: #70845f;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+.appointment-section-heading h2,
+.appointment-person-header h2,
+.appointment-status-card h2 {
+  margin: 7px 0 0;
+
+  font-size: 22px;
+}
+
+
+/* ================= APPOINTMENT INFO ================= */
+
+.appointment-info-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 15px;
+
+  margin-top: 25px;
+}
+
+.appointment-info-field {
+  padding: 17px;
+
+  background: #f8f4ec;
+
+  border-radius: 14px;
+}
+
+.appointment-info-field span,
+.appointment-person-details span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #95887b;
+
+  font-size: 9px;
+
+  letter-spacing: 1.5px;
+}
+
+.appointment-info-field strong {
+  color: #40382f;
+
+  font-size: 13px;
+}
+
+.appointment-reason-field {
+  grid-column: 1 / -1;
+}
+
+
+/* ================= PERSON ================= */
+
+.appointment-person-header {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  margin-bottom: 25px;
+}
+
+.appointment-person-avatar-large,
+.doctor-avatar-large {
+  width: 62px;
+  height: 62px;
+
+  border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.appointment-person-avatar-large {
+  background: #70845f;
+
+  color: white;
+
+  font-size: 25px;
+
+  font-weight: 600;
+}
+
+.doctor-avatar-large {
+  background: #e4eadc;
+
+  font-size: 27px;
+}
+
+.appointment-person-header p {
+  margin: 5px 0 0;
+
+  color: #81756b;
+
+  font-size: 12px;
+}
+
+.appointment-person-details {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 14px;
+
+  margin-bottom: 22px;
+}
+
+.appointment-person-details > div {
+  padding: 15px;
+
+  background: #f8f4ec;
+
+  border-radius: 13px;
+}
+
+.appointment-person-details strong {
+  font-size: 12px;
+
+  color: #40382f;
+}
+
+.view-person-btn {
+  border: none;
+
+  padding: 10px 15px;
+
+  border-radius: 20px;
+
+  background: #eee7dc;
+
+  color: #5d7551;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.view-person-btn:hover {
+  background: #70845f;
+
+  color: white;
+}
+
+
+/* ================= STATUS ================= */
+
+.appointment-status-card {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 30px;
+
+  background: #e6eadc;
+}
+
+.appointment-status-card p {
+  margin: 7px 0 0;
+
+  color: #6f7667;
+
+  font-size: 12px;
+}
+
+.appointment-status-actions {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  justify-content: flex-end;
+}
+
+.status-btn {
+  border: none;
+
+  padding: 10px 13px;
+
+  border-radius: 18px;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.status-btn:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+.pending-btn {
+  background: #f4ead3;
+
+  color: #9a742d;
+}
+
+.confirmed-btn {
+  background: #d9e5d0;
+
+  color: #557048;
+}
+
+.completed-btn {
+  background: #dfe8ed;
+
+  color: #526c7a;
+}
+
+.cancelled-btn {
+  background: #f3dddd;
+
+  color: #a44b4b;
+}
+
+.status-updating {
+  position: absolute;
+}
+
+
+/* ================= STATES ================= */
+
+.appointment-details-state {
+  min-height: 100vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 30px;
+}
+
+.appointment-details-state > div {
+  font-size: 40px;
+}
+
+.appointment-details-state h3 {
+  margin: 15px 0 7px;
+
+  font-size: 20px;
+}
+
+.appointment-details-state p {
+  margin: 0;
+
+  max-width: 450px;
+
+  color: #81756b;
+
+  font-size: 13px;
+}
+
+.back-appointments-btn {
+  margin-top: 20px;
+
+  text-decoration: none;
+
+  color: #5d7551;
+
+  font-size: 13px;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1000px) {
+
+  .appointment-details-nav {
+    display: none;
+  }
+
+  .appointment-person-details {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .appointment-status-card {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .appointment-status-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 650px) {
+
+  .appointment-details-container {
+    padding: 30px 5% 60px;
+  }
+
+  .appointment-details-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 20px;
+  }
+
+  .appointment-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .appointment-reason-field {
+    grid-column: auto;
+  }
+
+  .appointment-person-details {
+    grid-template-columns: 1fr;
+  }
+
+  .appointment-info-card,
+  .appointment-person-card,
+  .appointment-status-card {
+    padding: 22px;
+  }
+}

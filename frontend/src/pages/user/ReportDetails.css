@@ -1,0 +1,399 @@
+.report-details-page {
+  min-height: 100vh;
+  background: #f7f0e4;
+  color: #302a24;
+}
+
+/* Navbar */
+
+.report-details-navbar {
+  height: 78px;
+  padding: 0 7%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #fffdf9;
+  border-bottom: 1px solid #e4d9c8;
+}
+
+.back-link {
+  text-decoration: none;
+  color: #5d7551;
+  font-size: 14px;
+}
+
+.report-hospital {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.report-hospital span {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: #70845f;
+  color: white;
+}
+
+.report-hospital strong {
+  font-size: 15px;
+}
+
+/* Header */
+
+.report-details-header {
+  padding: 50px 7% 35px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.report-details-header > div:first-child > span {
+  color: #70845f;
+  font-size: 11px;
+  letter-spacing: 3px;
+  font-weight: 700;
+}
+
+.report-details-header h1 {
+  font-size: 38px;
+  margin: 12px 0 7px;
+}
+
+.report-details-header p {
+  margin: 0;
+  color: #81756b;
+  font-size: 13px;
+}
+
+.detail-status {
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.detail-status.analyzed {
+  background: #e3eadc;
+  color: #557048;
+}
+
+.detail-status.processing {
+  background: #f4ead3;
+  color: #98732d;
+}
+
+.detail-status.failed {
+  background: #f3dddd;
+  color: #a44b4b;
+}
+
+/* Processing */
+
+.processing-banner {
+  margin: 0 7% 30px;
+
+  padding: 20px 23px;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+
+  background: #f4ead3;
+  border: 1px solid #eadbb9;
+
+  border-radius: 17px;
+}
+
+.processing-banner-icon {
+  font-size: 25px;
+}
+
+.processing-banner strong {
+  color: #86682e;
+  font-size: 14px;
+}
+
+.processing-banner p {
+  margin: 6px 0 0;
+
+  color: #806f56;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* Failed */
+
+.failed-banner {
+  margin: 0 7% 30px;
+
+  padding: 20px;
+
+  border-radius: 17px;
+
+  background: #f3dddd;
+  color: #934747;
+}
+
+.failed-banner strong {
+  font-size: 14px;
+}
+
+.failed-banner p {
+  font-size: 12px;
+}
+
+/* Analysis */
+
+.analysis-container {
+  max-width: 1000px;
+  margin: auto;
+
+  padding: 0 30px 70px;
+}
+
+.analysis-card {
+  background: #fffdf9;
+
+  border: 1px solid #e5dac9;
+
+  border-radius: 21px;
+
+  padding: 27px;
+
+  margin-bottom: 18px;
+}
+
+.analysis-label {
+  color: #70845f;
+
+  font-size: 10px;
+
+  letter-spacing: 2.5px;
+
+  font-weight: 700;
+}
+
+.analysis-card h2 {
+  font-size: 20px;
+  margin: 10px 0 13px;
+}
+
+.analysis-card > p {
+  color: #675c53;
+
+  font-size: 13px;
+
+  line-height: 1.8;
+}
+
+/* Findings */
+
+.finding-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.finding-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+
+  padding: 12px 14px;
+
+  background: #f5f1e9;
+
+  border-radius: 12px;
+}
+
+.finding-item span {
+  color: #668056;
+  font-weight: 700;
+}
+
+.finding-item p {
+  margin: 0;
+
+  color: #665b52;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+/* Abnormal */
+
+.normal-result {
+  padding: 14px;
+
+  border-radius: 12px;
+
+  background: #e7eddf;
+
+  color: #59734d;
+
+  font-size: 12px;
+}
+
+.abnormal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.abnormal-item {
+  padding: 13px;
+
+  border-radius: 12px;
+
+  background: #f5dddd;
+
+  color: #934b4b;
+
+  font-size: 12px;
+}
+
+/* Concerns */
+
+.concern-list,
+.medication-list,
+.recommendation-list {
+  padding-left: 20px;
+}
+
+.concern-list li,
+.medication-list li,
+.recommendation-list li {
+  margin-bottom: 9px;
+
+  color: #665b52;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+/* Medication */
+
+.medication-card {
+  background: #f4f0e7;
+}
+
+.medication-warning {
+  margin-top: 20px;
+
+  padding: 15px;
+
+  border-radius: 13px;
+
+  background: #f3dddd;
+}
+
+.medication-warning strong {
+  color: #964949;
+  font-size: 12px;
+}
+
+.medication-warning p {
+  margin: 6px 0 0;
+
+  color: #875e5e;
+
+  font-size: 11px;
+
+  line-height: 1.6;
+}
+
+/* Doctor */
+
+.doctor-advice-card {
+  background: #e6eadc;
+  border-color: #d9dfcc;
+}
+
+.doctor-advice-card p {
+  color: #59634f !important;
+}
+
+/* No data */
+
+.no-data {
+  color: #91857a !important;
+  font-size: 12px !important;
+}
+
+/* Disclaimer */
+
+.ai-disclaimer {
+  padding: 20px;
+
+  border-radius: 16px;
+
+  background: #e8e3d8;
+
+  margin-top: 10px;
+}
+
+.ai-disclaimer strong {
+  color: #665d54;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.ai-disclaimer p {
+  color: #756b62;
+
+  font-size: 11px;
+
+  line-height: 1.7;
+
+  margin: 8px 0 0;
+}
+
+/* Loading */
+
+.report-loading,
+.report-not-found {
+  min-height: 70vh;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.report-loading div,
+.report-not-found div {
+  font-size: 40px;
+}
+
+.report-not-found a {
+  color: #5d7551;
+  text-decoration: none;
+}
+
+@media (max-width: 650px) {
+  .report-details-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .report-details-header h1 {
+    font-size: 30px;
+  }
+}

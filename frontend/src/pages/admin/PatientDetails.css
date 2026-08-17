@@ -1,0 +1,904 @@
+.patient-details-page {
+  min-height: 100vh;
+  background: #f7f0e4;
+  color: #302a24;
+}
+
+
+/* ================= NAVBAR ================= */
+
+.admin-details-navbar {
+  height: 78px;
+  padding: 0 6%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #fffdf9;
+  border-bottom: 1px solid #e5dacb;
+
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.admin-details-logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  text-decoration: none;
+  color: #302a24;
+}
+
+.admin-details-logo > span {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  background: #70845f;
+  color: white;
+
+  font-size: 21px;
+}
+
+.admin-details-logo strong {
+  display: block;
+  font-size: 16px;
+}
+
+.admin-details-logo small {
+  display: block;
+  margin-top: 2px;
+
+  color: #8b7d70;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.admin-details-nav {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  background: #f3ede3;
+  padding: 5px;
+
+  border-radius: 28px;
+}
+
+.admin-details-nav a {
+  padding: 9px 13px;
+
+  border-radius: 20px;
+
+  text-decoration: none;
+
+  color: #665b51;
+
+  font-size: 12px;
+
+  transition: 0.2s;
+}
+
+.admin-details-nav a:hover {
+  background: #fffdf9;
+  color: #70845f;
+}
+
+.admin-details-nav a.active {
+  background: #70845f;
+  color: white;
+}
+
+.details-logout {
+  border: none;
+
+  background: transparent;
+
+  color: #75685d;
+
+  padding: 8px 12px;
+  border-radius: 18px;
+
+  cursor: pointer;
+
+  font-size: 12px;
+}
+
+.details-logout:hover {
+  background: #eee5d8;
+  color: #3c342d;
+}
+
+
+/* ================= CONTAINER ================= */
+
+.patient-details-container {
+  max-width: 1250px;
+
+  margin: auto;
+
+  padding: 35px 6% 80px;
+}
+
+
+/* ================= BACK ================= */
+
+.patient-back-link {
+  display: inline-block;
+
+  margin-bottom: 25px;
+
+  color: #5d7551;
+
+  text-decoration: none;
+
+  font-size: 13px;
+}
+
+.patient-back-link:hover {
+  color: #3d342b;
+}
+
+
+/* ================= PATIENT HEADER ================= */
+
+.patient-profile-header {
+  padding: 30px;
+
+  border-radius: 24px;
+
+  background: #fffdf9;
+
+  border: 1px solid #e5dac9;
+
+  display: flex;
+  align-items: center;
+
+  gap: 20px;
+}
+
+.patient-large-avatar {
+  width: 82px;
+  height: 82px;
+
+  border-radius: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #70845f;
+
+  color: white;
+
+  font-size: 31px;
+  font-weight: 600;
+}
+
+.patient-header-info {
+  flex: 1;
+}
+
+.patient-header-info > span {
+  color: #70845f;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+.patient-header-info h1 {
+  margin: 8px 0 4px;
+
+  font-size: 30px;
+}
+
+.patient-header-info p {
+  margin: 0;
+
+  color: #7e7368;
+
+  font-size: 13px;
+}
+
+.patient-header-meta {
+  display: flex;
+
+  gap: 20px;
+
+  margin-top: 14px;
+}
+
+.patient-header-meta span {
+  color: #887c70;
+
+  font-size: 11px;
+}
+
+.patient-header-meta strong {
+  margin-left: 5px;
+
+  color: #5b704e;
+
+  font-weight: 600;
+}
+
+.patient-header-status {
+  padding: 14px 20px;
+
+  border-radius: 14px;
+
+  background: #e5eadc;
+
+  text-align: center;
+}
+
+.patient-header-status span {
+  display: block;
+
+  color: #70845f;
+
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+}
+
+.patient-header-status strong {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #557048;
+
+  font-size: 13px;
+}
+
+
+/* ================= SUMMARY ================= */
+
+.patient-summary-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(5, 1fr);
+
+  gap: 15px;
+
+  margin-top: 20px;
+}
+
+.patient-summary-card {
+  padding: 20px;
+
+  border-radius: 17px;
+
+  background: #fffdf9;
+
+  border: 1px solid #e5dac9;
+}
+
+.patient-summary-card span {
+  display: block;
+
+  color: #94877b;
+
+  font-size: 9px;
+
+  letter-spacing: 1.5px;
+}
+
+.patient-summary-card strong {
+  display: block;
+
+  margin-top: 8px;
+
+  font-size: 21px;
+
+  color: #3d342b;
+}
+
+
+/* ================= SECTION ================= */
+
+.details-section {
+  margin-top: 45px;
+}
+
+.details-section-heading > span {
+  color: #70845f;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 2.5px;
+}
+
+.details-section-heading h2 {
+  margin: 7px 0 18px;
+
+  font-size: 25px;
+}
+
+
+/* ================= DETAILS CARD ================= */
+
+.details-card {
+  padding: 25px;
+
+  border-radius: 20px;
+
+  background: #fffdf9;
+
+  border: 1px solid #e5dac9;
+}
+
+.details-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 15px;
+}
+
+.detail-field {
+  padding: 17px;
+
+  border-radius: 13px;
+
+  background: #f8f4ec;
+}
+
+.detail-field-wide {
+  grid-column: span 2;
+}
+
+.detail-field span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #95887b;
+
+  font-size: 9px;
+
+  letter-spacing: 1.5px;
+}
+
+.detail-field strong {
+  color: #433b34;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  word-break: break-word;
+}
+
+.emergency-card {
+  background: #fffaf7;
+}
+
+
+/* ================= APPOINTMENTS ================= */
+
+.appointment-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.appointment-card {
+  padding: 20px;
+
+  border-radius: 18px;
+
+  background: #fffdf9;
+
+  border: 1px solid #e5dac9;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 20px;
+}
+
+.appointment-date {
+  min-width: 125px;
+
+  padding-right: 20px;
+
+  border-right: 1px solid #e8ded0;
+}
+
+.appointment-date strong {
+  display: block;
+
+  color: #3d342b;
+
+  font-size: 13px;
+}
+
+.appointment-date span {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #8b7e72;
+
+  font-size: 11px;
+}
+
+.appointment-info {
+  flex: 1;
+}
+
+.appointment-info h3 {
+  margin: 0;
+
+  font-size: 15px;
+}
+
+.appointment-info p {
+  margin: 4px 0;
+
+  color: #687957;
+
+  font-size: 12px;
+}
+
+.appointment-info > span {
+  color: #8b7e72;
+
+  font-size: 11px;
+}
+
+.appointment-info small {
+  display: block;
+
+  margin-top: 6px;
+
+  color: #81756b;
+
+  font-size: 11px;
+}
+
+.appointment-right {
+  min-width: 145px;
+
+  text-align: right;
+}
+
+.appointment-status,
+.report-admin-status {
+  display: inline-block;
+
+  padding: 6px 10px;
+
+  border-radius: 18px;
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+.appointment-status.pending {
+  background: #f4ead3;
+  color: #9a742d;
+}
+
+.appointment-status.confirmed {
+  background: #e3eadc;
+  color: #557048;
+}
+
+.appointment-status.completed {
+  background: #e2e8e0;
+  color: #4f6946;
+}
+
+.appointment-status.cancelled {
+  background: #f3dddd;
+  color: #a44b4b;
+}
+
+.doctor-mini-info {
+  margin-top: 10px;
+}
+
+.doctor-mini-info span {
+  display: block;
+
+  color: #a09488;
+
+  font-size: 9px;
+}
+
+.doctor-mini-info strong {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #635950;
+
+  font-size: 10px;
+}
+
+
+/* ================= REPORTS ================= */
+
+.reports-admin-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.admin-report-card {
+  padding: 20px;
+
+  border-radius: 18px;
+
+  background: #fffdf9;
+
+  border: 1px solid #e5dac9;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+.admin-report-icon {
+  width: 48px;
+  height: 48px;
+
+  flex-shrink: 0;
+
+  border-radius: 13px;
+
+  background: #e4eadc;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 21px;
+}
+
+.admin-report-info {
+  flex: 1;
+}
+
+.admin-report-info h3 {
+  margin: 0;
+
+  font-size: 14px;
+}
+
+.admin-report-info p {
+  margin: 4px 0;
+
+  color: #6e6259;
+
+  font-size: 11px;
+}
+
+.admin-report-info span {
+  color: #9a8d80;
+
+  font-size: 10px;
+}
+
+.admin-report-right {
+  text-align: right;
+}
+
+.report-admin-status.analyzed {
+  background: #e3eadc;
+  color: #557048;
+}
+
+.report-admin-status.processing {
+  background: #f4ead3;
+  color: #9a742d;
+}
+
+.report-admin-status.failed {
+  background: #f3dddd;
+  color: #a44b4b;
+}
+
+.admin-report-right small {
+  display: block;
+
+  margin-top: 8px;
+
+  color: #648054;
+
+  font-size: 10px;
+}
+
+
+/* ================= EMPTY ================= */
+
+.details-empty {
+  padding: 45px 25px;
+
+  border-radius: 18px;
+
+  background: #fffdf9;
+
+  border: 1px dashed #d9cdbb;
+
+  text-align: center;
+}
+
+.details-empty > div {
+  font-size: 30px;
+}
+
+.details-empty h3 {
+  margin: 12px 0 5px;
+
+  font-size: 16px;
+}
+
+.details-empty p {
+  margin: 0;
+
+  color: #81756b;
+
+  font-size: 12px;
+}
+
+
+/* ================= SECURITY ================= */
+
+.patient-admin-note {
+  margin-top: 45px;
+
+  padding: 18px 22px;
+
+  border-radius: 16px;
+
+  background: #e6eadc;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+}
+
+.patient-admin-note > div:first-child {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  border-radius: 12px;
+
+  background: #fffdf9;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.patient-admin-note strong {
+  font-size: 12px;
+
+  color: #536644;
+}
+
+.patient-admin-note p {
+  margin: 4px 0 0;
+
+  color: #6f7667;
+
+  font-size: 11px;
+}
+
+
+/* ================= STATES ================= */
+
+.patient-details-state {
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.patient-details-state > div {
+  font-size: 40px;
+}
+
+.patient-details-state h2 {
+  margin: 15px 0 7px;
+}
+
+.patient-details-state p {
+  color: #81756b;
+
+  font-size: 13px;
+}
+
+.patient-details-error {
+  max-width: 500px;
+
+  margin: 120px auto;
+
+  padding: 40px;
+
+  border-radius: 22px;
+
+  background: #fffdf9;
+
+  border: 1px solid #e5dac9;
+
+  text-align: center;
+}
+
+.patient-error-icon {
+  font-size: 35px;
+}
+
+.patient-details-error h2 {
+  margin: 15px 0 8px;
+}
+
+.patient-details-error p {
+  color: #a34838;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+.back-patients-btn {
+  display: inline-block;
+
+  margin-top: 20px;
+
+  padding: 11px 18px;
+
+  border-radius: 22px;
+
+  background: #3c342d;
+
+  color: white;
+
+  text-decoration: none;
+
+  font-size: 12px;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1050px) {
+
+  .admin-details-nav {
+    display: none;
+  }
+
+  .patient-summary-grid {
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 750px) {
+
+  .patient-details-container {
+    padding: 30px 5% 60px;
+  }
+
+  .patient-profile-header {
+    align-items: flex-start;
+
+    flex-wrap: wrap;
+  }
+
+  .patient-header-status {
+    margin-left: 102px;
+  }
+
+  .patient-summary-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-field-wide {
+    grid-column: span 1;
+  }
+
+  .appointment-card {
+    align-items: flex-start;
+
+    flex-wrap: wrap;
+  }
+
+  .appointment-date {
+    border-right: none;
+
+    border-bottom: 1px solid #e8ded0;
+
+    padding: 0 0 12px;
+
+    width: 100%;
+  }
+
+  .appointment-right {
+    text-align: left;
+
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .patient-profile-header {
+    padding: 22px;
+  }
+
+  .patient-large-avatar {
+    width: 65px;
+    height: 65px;
+
+    border-radius: 19px;
+  }
+
+  .patient-header-info h1 {
+    font-size: 24px;
+  }
+
+  .patient-header-meta {
+    flex-direction: column;
+
+    gap: 5px;
+  }
+
+  .patient-header-status {
+    margin-left: 0;
+
+    width: 100%;
+  }
+
+  .patient-summary-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .admin-report-card {
+    align-items: flex-start;
+  }
+
+  .admin-report-right {
+    margin-left: auto;
+  }
+}
