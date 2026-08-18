@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API } from "../../config";
+import DoctorTopbar from "../../components/DoctorTopbar";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import "../../styles/doctor.css";
 
 function DoctorAppointments() {
@@ -35,13 +37,13 @@ function DoctorAppointments() {
         throw new Error(data.message);
       }
 
-      setAppointments(data.appointments);
+      setAppointments(data.appointments || []);
 
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
 
   };
 
@@ -79,11 +81,7 @@ function DoctorAppointments() {
 
   if (loading) {
 
-    return (
-      <div className="doctor-loading">
-        Loading Appointments...
-      </div>
-    );
+    return <LoadingSpinner text="Loading Appointments..." className="doctor-loading" />;
 
   }
 
@@ -91,17 +89,7 @@ function DoctorAppointments() {
 
     <div className="doctor-dashboard">
 
-      <div className="doctor-topbar">
-
-        <h2>Appointments</h2>
-
-        <button
-          onClick={() => navigate("/doctor/dashboard")}
-        >
-          Back
-        </button>
-
-      </div>
+      <DoctorTopbar title="Appointments" showBack={true} backPath="/doctor/dashboard" />
 
       <div className="appointment-table">
 

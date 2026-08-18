@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { API } from "../../config";
+import AdminNavbar from "../../components/AdminNavbar";
 import "./Reports.css";
 
 function Reports() {
@@ -67,58 +68,7 @@ function Reports() {
 
       {/* NAVBAR */}
 
-      <nav className="admin-page-navbar">
-
-        <Link
-          to="/admin/dashboard"
-          className="admin-page-logo"
-        >
-          <span>✚</span>
-
-          <div>
-            <strong>City Hospital</strong>
-            <small>Admin Portal</small>
-          </div>
-        </Link>
-
-        <div className="admin-page-nav">
-
-          <Link to="/admin/dashboard">
-            Dashboard
-          </Link>
-
-          <Link to="/admin/patients">
-            Patients
-          </Link>
-
-          <Link to="/admin/doctors">
-            Doctors
-          </Link>
-
-          <Link to="/admin/appointments">
-            Appointments
-          </Link>
-
-          <Link
-            to="/admin/reports"
-            className="active"
-          >
-            Reports
-          </Link>
-
-        </div>
-
-        <button
-          className="admin-logout"
-          onClick={() => {
-            localStorage.clear();
-            window.location.href = "/login";
-          }}
-        >
-          Logout
-        </button>
-
-      </nav>
+      <AdminNavbar activePage="reports" />
 
       <main className="admin-reports-container">
 

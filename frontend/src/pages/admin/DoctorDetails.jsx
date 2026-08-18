@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { API } from "../../config";
+import AdminNavbar from "../../components/AdminNavbar";
 import "./DoctorDetails.css";
 
 function DoctorDetails() {
@@ -82,62 +83,13 @@ const [error, setError] = useState("");
 
       {/* ================= NAVBAR ================= */}
 
-      <nav className="doctor-details-navbar">
-
-        <Link
-          to="/admin/dashboard"
-          className="doctor-details-logo"
-        >
-          <span>✚</span>
-
-          <div>
-            <strong>City Hospital</strong>
-            <small>Admin Portal</small>
-          </div>
-        </Link>
-
-        <div className="doctor-details-nav">
-
-          <Link to="/admin/dashboard">
-            Dashboard
-          </Link>
-
-          <Link
-            to="/admin/patients"
-          >
-            Patients
-          </Link>
-
-          <Link
-            to="/admin/doctors"
-            className="active"
-          >
-            Doctors
-          </Link>
-
-          <Link to="/admin/appointments">
-            Appointments
-          </Link>
-
-          <Link to="/admin/reports">
-            Reports
-          </Link>
-
-        </div>
-
-        <button
-          className="doctor-details-logout"
-          onClick={() => {
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-
-            window.location.href = "/login";
-          }}
-        >
-          Logout
-        </button>
-
-      </nav>
+      <AdminNavbar
+        activePage="doctors"
+        className="doctor-details-navbar"
+        logoClassName="doctor-details-logo"
+        navClassName="doctor-details-nav"
+        logoutClassName="doctor-details-logout"
+      />
 
 
       {/* ================= MAIN ================= */}

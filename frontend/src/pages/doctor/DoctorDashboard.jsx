@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API } from "../../config";
+import DoctorTopbar from "../../components/DoctorTopbar";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import "../../styles/doctor.css";
 
 function DoctorDashboard() {
@@ -25,8 +27,6 @@ function DoctorDashboard() {
   useEffect(() => {
     loadDashboard();
   }, []);
-
-
 
   const loadDashboard = async () => {
     try {
@@ -60,10 +60,10 @@ function DoctorDashboard() {
       );
 
       setAppointments(
-  Array.isArray(data.todayAppointments)
-    ? data.todayAppointments
-    : []
-);
+        Array.isArray(data.todayAppointments)
+          ? data.todayAppointments
+          : []
+      );
     } catch (err) {
       console.log(err);
 
@@ -87,22 +87,12 @@ function DoctorDashboard() {
   };
 
   if (loading) {
-    return (
-      <div className="doctor-loading">
-        Loading Dashboard...
-      </div>
-    );
+    return <LoadingSpinner text="Loading Dashboard..." className="doctor-loading" />;
   }
 
   return (
     <div className="doctor-dashboard">
-      <div className="doctor-topbar">
-        <h2>🏥 City Hospital</h2>
-
-        <button onClick={logout}>
-          Logout
-        </button>
-      </div>
+      <DoctorTopbar title="🏥 City Hospital" showLogout={true} onLogout={logout} />
 
       <div className="doctor-welcome">
         <h1>

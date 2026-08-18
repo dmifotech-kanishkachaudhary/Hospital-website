@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { API } from "../../config";
+import AdminNavbar from "../../components/AdminNavbar";
+import SearchBar from "../../components/SearchBar";
 import "./Doctors.css";
 
 function Doctors() {
@@ -105,77 +107,7 @@ function Doctors() {
 
       {/* ================= NAVBAR ================= */}
 
-      <nav className="admin-page-navbar">
-
-        <Link
-          to="/admin/dashboard"
-          className="admin-page-logo"
-        >
-          <span>✚</span>
-
-          <div>
-            <strong>
-              City Hospital
-            </strong>
-
-            <small>
-              Admin Portal
-            </small>
-          </div>
-        </Link>
-
-        <div className="admin-page-nav">
-
-          <Link to="/admin/dashboard">
-            Dashboard
-          </Link>
-
-          <Link
-            to="/admin/patients"
-          >
-            Patients
-          </Link>
-
-          <Link
-            to="/admin/doctors"
-            className="active"
-          >
-            Doctors
-          </Link>
-
-          <Link
-            to="/admin/appointments"
-          >
-            Appointments
-          </Link>
-
-          <Link
-            to="/admin/reports"
-          >
-            Reports
-          </Link>
-
-        </div>
-
-        <button
-          className="admin-logout"
-          onClick={() => {
-            localStorage.removeItem(
-              "token"
-            );
-
-            localStorage.removeItem(
-              "user"
-            );
-
-            window.location.href =
-              "/login";
-          }}
-        >
-          Logout
-        </button>
-
-      </nav>
+      <AdminNavbar activePage="doctors" />
 
 
       {/* ================= MAIN ================= */}
@@ -222,41 +154,16 @@ function Doctors() {
 
         {/* SEARCH */}
 
-        <form
-          className="doctor-search"
+        <SearchBar
+          value={search}
+          onChange={setSearch}
           onSubmit={handleSearch}
-        >
-
-          <div className="doctor-search-input">
-
-            <span>⌕</span>
-
-            <input
-              type="text"
-              placeholder="Search by Doctor ID, name, email, specialization or department..."
-              value={search}
-              onChange={(e) =>
-                setSearch(e.target.value)
-              }
-            />
-
-          </div>
-
-          <button type="submit">
-            Search
-          </button>
-
-          {search && (
-            <button
-              type="button"
-              className="clear-doctor-search"
-              onClick={handleClear}
-            >
-              Clear
-            </button>
-          )}
-
-        </form>
+          onClear={handleClear}
+          placeholder="Search by Doctor ID, name, email, specialization or department..."
+          formClassName="doctor-search"
+          inputWrapperClassName="doctor-search-input"
+          clearClassName="clear-doctor-search"
+        />
 
 
         {/* ERROR */}

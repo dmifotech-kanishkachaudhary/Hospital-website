@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { API } from "../../config";
+import AdminNavbar from "../../components/AdminNavbar";
 import "./AppointmentDetails.css";
 
 function AppointmentDetails() {
@@ -191,66 +192,13 @@ function AppointmentDetails() {
 
       {/* ================= NAVBAR ================= */}
 
-      <nav className="appointment-details-navbar">
-
-        <Link
-          to="/admin/dashboard"
-          className="appointment-details-logo"
-        >
-          <span>✚</span>
-
-          <div>
-            <strong>
-              City Hospital
-            </strong>
-
-            <small>
-              Admin Portal
-            </small>
-          </div>
-        </Link>
-
-        <div className="appointment-details-nav">
-
-          <Link to="/admin/dashboard">
-            Dashboard
-          </Link>
-
-          <Link to="/admin/patients">
-            Patients
-          </Link>
-
-          <Link to="/admin/doctors">
-            Doctors
-          </Link>
-
-          <Link
-            to="/admin/appointments"
-            className="active"
-          >
-            Appointments
-          </Link>
-
-          <Link to="/admin/reports">
-            Reports
-          </Link>
-
-        </div>
-
-        <button
-          className="appointment-details-logout"
-          onClick={() => {
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-
-            window.location.href =
-              "/login";
-          }}
-        >
-          Logout
-        </button>
-
-      </nav>
+      <AdminNavbar
+        activePage="appointments"
+        className="appointment-details-navbar"
+        logoClassName="appointment-details-logo"
+        navClassName="appointment-details-nav"
+        logoutClassName="appointment-details-logout"
+      />
 
 
       {/* ================= MAIN ================= */}
