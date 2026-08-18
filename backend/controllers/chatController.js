@@ -1,3 +1,8 @@
+/**
+ * @file chatController.js
+ * @description Real-time Patient-Doctor and AI Consultation Chat Controller using Google Gemini AI.
+ */
+
 const { GoogleGenAI } = require("@google/genai");
 const Doctor = require("../models/Doctor");
 const Chat = require("../models/Chat");
@@ -8,10 +13,10 @@ const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
 
-// =========================================
-// START CHAT
-// =========================================
-
+/**
+ * Initialize or fetch existing chat room with a doctor
+ * @route POST /api/chat/start
+ */
 const startChat = async (req, res) => {
   try {
     const patientId = req.user.id;
@@ -38,42 +43,32 @@ const startChat = async (req, res) => {
       });
     }
 
-    const messages = await Message.find({
-      chat: chat._id,
-    }).sort("createdAt");
+    const messages = await Message.find({ chat: chat._id }).sort("createdAt");
 
-    res.json({
+    return res.json({
       success: true,
       chat,
       messages,
     });
-
   } catch (err) {
-
-    console.error(err);
-
-    res.status(500).json({
+    console.error("[START_CHAT_ERROR]", err);
+    return res.status(500).json({
       success: false,
       message: err.message,
     });
-
   }
 };
 
+/**
+ * Get list of doctors associated with the logged-in patient's appointments
+ * @route GET /api/chat/patient-doctors
+ */
 const getPatientDoctors = async (req, res) => {
   try {
-
-    console.log("Logged User:", req.user);
-
-    console.log("Searching appointments for patient:", req.user.id);
-
     const appointments = await Appointment.find({
       patient: req.user.id,
-      status:{
-      $in:["Pending","Confirmed","Completed"]
-    },
+      status: { $in: ["Pending", "Confirmed", "Completed"] },
     })
-    
       .populate({
         path: "doctor",
         populate: {
@@ -81,22 +76,16 @@ const getPatientDoctors = async (req, res) => {
           select: "name email",
         },
       })
-
       .sort("-createdAt");
-
-      console.log(appointments);
 
     const doctors = [];
     const added = new Set();
 
     for (const appointment of appointments) {
-
       if (!appointment.doctor) continue;
 
       const id = appointment.doctor._id.toString();
-
       if (added.has(id)) continue;
-
       added.add(id);
 
       let chat = await Chat.findOne({
@@ -115,176 +104,115 @@ const getPatientDoctors = async (req, res) => {
       doctors.push({
         doctorId: appointment.doctor._id,
         doctorName: appointment.doctor.user.name,
-        specialization:
-          appointment.doctor.specialization,
+        specialization: appointment.doctor.specialization,
         chatId: chat._id,
       });
     }
 
-    //=======================//
-
-    console.log("Appointments:", appointments.length);
-
-appointments.forEach((a) => {
-  console.log({
-    doctorId: a.doctor?._id,
-    doctorName: a.doctor?.user?.name,
-    status: a.status,
-  });
-});
-
-console.log("Doctors Sent:", doctors);
-
-//==========================//
-
-    res.json({
+    return res.json({
       success: true,
       doctors,
     });
-
   } catch (err) {
-
-    res.status(500).json({
+    console.error("[GET_PATIENT_DOCTORS_ERROR]", err);
+    return res.status(500).json({
       success: false,
       message: err.message,
     });
-
   }
 };
 
-// =========================================
-// GET MESSAGES
-// =========================================
-
+/**
+ * Fetch historical messages for a chat room
+ * @route GET /api/chat/messages/:chatId
+ */
 const getMessages = async (req, res) => {
-
   try {
-
     const messages = await Message.find({
       chat: req.params.chatId,
     }).sort("createdAt");
 
-    res.json({
+    return res.json({
       success: true,
       messages,
     });
-
   } catch (err) {
-
-    console.error(err);
-
-    res.status(500).json({
+    console.error("[GET_MESSAGES_ERROR]", err);
+    return res.status(500).json({
       success: false,
       message: err.message,
     });
-
   }
-
 };
 
-// =========================================
-// SEND MESSAGE (PATIENT)
-// =========================================
-
+/**
+ * Process incoming patient message (handles doctor active state, handover request, or AI bot response)
+ * @route POST /api/chat/send
+ */
 const sendMessage = async (req, res) => {
-
   try {
-
     const { chatId, message } = req.body;
-
     const chat = await Chat.findById(chatId);
 
     if (!chat) {
       return res.status(404).json({
-        success:false,
-        message:"Chat not found",
+        success: false,
+        message: "Chat not found",
       });
     }
 
     // Save Patient Message
-
     const patientMessage = await Message.create({
-
-      chat:chatId,
-      senderType:"patient",
-      senderId:req.user.id,
+      chat: chatId,
+      senderType: "patient",
+      senderId: req.user.id,
       message,
-
     });
 
-    req.app
-      .get("io")
-      .to(chatId)
-      .emit("new-message", patientMessage);
+    req.app.get("io").to(chatId).emit("new-message", patientMessage);
 
-    // =====================================
-    // If Doctor is active
-    // =====================================
-
-    if(chat.status==="doctor"){
-
+    // If Doctor is active in chat room
+    if (chat.status === "doctor") {
       return res.json({
-
-        success:true,
-        status:"doctor",
-
+        success: true,
+        status: "doctor",
       });
-
     }
 
-    // =====================================
-    // Doctor request
-    // =====================================
-
+    // Check if patient requests a human doctor consultation
     const lower = message.toLowerCase();
-
     const wantsDoctor =
-
       lower.includes("doctor") ||
       lower.includes("human") ||
       lower.includes("consultation") ||
       lower.includes("talk to doctor") ||
       lower.includes("connect doctor");
 
-    if(wantsDoctor){
-
-      chat.doctorRequested=true;
-
+    if (wantsDoctor) {
+      chat.doctorRequested = true;
       await chat.save();
 
-      const botReply =
-`Your request has been sent to the doctor.
+      const botReply = `Your request has been sent to the doctor.
 
 If the doctor is available, they will join this conversation shortly.
 
 Until then, you can continue chatting with the AI Assistant.`;
 
-      const botMessage=await Message.create({
-
-        chat:chatId,
-        senderType:"bot",
-        message:botReply,
-
+      const botMessage = await Message.create({
+        chat: chatId,
+        senderType: "bot",
+        message: botReply,
       });
 
-      req.app
-      .get("io")
-      .to(chatId)
-      .emit("new-message",botMessage);
+      req.app.get("io").to(chatId).emit("new-message", botMessage);
 
       return res.json({
-
-        success:true,
-        reply:botReply,
-
+        success: true,
+        reply: botReply,
       });
-
     }
 
-    // =====================================
-    // Gemini Prompt
-    // =====================================
-
+    // Generate AI Bot Response via Gemini
     const prompt = `
 You are City Hospital AI Assistant.
 
@@ -308,72 +236,44 @@ ${message}
 `;
 
     const response = await ai.models.generateContent({
-
-      model:"gemini-3.5-flash",
-
-      contents:prompt,
-
+      model: "gemini-3.5-flash",
+      contents: prompt,
     });
 
     const reply =
-      typeof response.text==="function"
-      ?response.text().trim()
-      :(response.text||"").trim();
+      typeof response.text === "function"
+        ? response.text().trim()
+        : (response.text || "").trim();
 
-    const botMessage=await Message.create({
-
-      chat:chatId,
-
-      senderType:"bot",
-
-      message:reply,
-
+    const botMessage = await Message.create({
+      chat: chatId,
+      senderType: "bot",
+      message: reply,
     });
 
-    req.app
-    .get("io")
-    .to(chatId)
-    .emit("new-message",botMessage);
+    req.app.get("io").to(chatId).emit("new-message", botMessage);
 
-    res.json({
-
-      success:true,
-
+    return res.json({
+      success: true,
       reply,
-
-      status:"bot",
-
+      status: "bot",
     });
-
-  }
-
-  catch(err){
-
-    console.error(err);
-
-    res.status(500).json({
-
-      success:false,
-
-      message:err.message,
-
+  } catch (err) {
+    console.error("[SEND_MESSAGE_ERROR]", err);
+    return res.status(500).json({
+      success: false,
+      message: err.message,
     });
-
   }
-
 };
 
-// =========================================
-// WAITING CHATS
-// =========================================
-
+/**
+ * Fetch chats waiting for doctor assistance
+ * @route GET /api/chat/waiting
+ */
 const getWaitingChats = async (req, res) => {
-
   try {
-
-    const doctor = await Doctor.findOne({
-      user: req.user.id,
-    });
+    const doctor = await Doctor.findOne({ user: req.user.id });
 
     if (!doctor) {
       return res.status(404).json({
@@ -390,54 +290,41 @@ const getWaitingChats = async (req, res) => {
       .populate("patient", "name email phone")
       .sort("-updatedAt");
 
-    res.json({
+    return res.json({
       success: true,
       chats,
     });
-
   } catch (err) {
-
-    res.status(500).json({
+    console.error("[GET_WAITING_CHATS_ERROR]", err);
+    return res.status(500).json({
       success: false,
       message: err.message,
     });
-
   }
-
 };
 
-
-
-// =========================================
-// DOCTOR JOIN CHAT
-// =========================================
-
+/**
+ * Join active chat session as doctor
+ * @route PUT /api/chat/join/:id
+ */
 const joinChat = async (req, res) => {
-
   try {
-
-    const doctor = await Doctor.findOne({
-      user: req.user.id,
-    });
+    const doctor = await Doctor.findOne({ user: req.user.id });
 
     if (!doctor) {
-
       return res.status(404).json({
         success: false,
         message: "Doctor not found",
       });
-
     }
 
     const chat = await Chat.findById(req.params.id);
 
     if (!chat) {
-
       return res.status(404).json({
         success: false,
         message: "Chat not found",
       });
-
     }
 
     chat.status = "doctor";
@@ -446,14 +333,9 @@ const joinChat = async (req, res) => {
     await chat.save();
 
     const systemMessage = await Message.create({
-
       chat: chat._id,
-
       senderType: "system",
-
-      message:
-        "👨‍⚕️ Doctor has joined the conversation.",
-
+      message: "👨‍⚕️ Doctor has joined the conversation.",
     });
 
     req.app
@@ -461,203 +343,130 @@ const joinChat = async (req, res) => {
       .to(chat._id.toString())
       .emit("new-message", systemMessage);
 
-    res.json({
-
+    return res.json({
       success: true,
-
       chat,
-
     });
-
   } catch (err) {
-
-    res.status(500).json({
-
+    console.error("[JOIN_CHAT_ERROR]", err);
+    return res.status(500).json({
       success: false,
-
       message: err.message,
-
     });
-
   }
-
 };
 
-
-
-// =========================================
-// DOCTOR SEND MESSAGE
-// =========================================
-
+/**
+ * Send message as doctor in active chat
+ * @route POST /api/chat/doctor-send
+ */
 const doctorSendMessage = async (req, res) => {
-
   try {
-
     const { chatId, message } = req.body;
-
-    const doctor = await Doctor.findOne({
-      user: req.user.id,
-    });
+    const doctor = await Doctor.findOne({ user: req.user.id });
 
     if (!doctor) {
-
       return res.status(404).json({
         success: false,
         message: "Doctor not found",
       });
-
     }
 
     const chat = await Chat.findOne({
-
       _id: chatId,
-
       doctor: doctor._id,
-
       status: "doctor",
-
     });
 
     if (!chat) {
-
       return res.status(404).json({
-
         success: false,
-
         message: "Chat not assigned",
-
       });
-
     }
 
     const doctorMessage = await Message.create({
-
       chat: chatId,
-
       senderType: "doctor",
-
       senderId: doctor._id,
-
       message,
-
     });
 
-    req.app
-      .get("io")
-      .to(chatId)
-      .emit("new-message", doctorMessage);
+    req.app.get("io").to(chatId).emit("new-message", doctorMessage);
 
-    res.json({
-
+    return res.json({
       success: true,
-
       message: doctorMessage,
-
     });
-
   } catch (err) {
-
-    res.status(500).json({
-
+    console.error("[DOCTOR_SEND_MESSAGE_ERROR]", err);
+    return res.status(500).json({
       success: false,
-
       message: err.message,
-
     });
-
   }
-
 };
 
-// =========================================
-// DOCTOR ACTIVE CHATS
-// =========================================
-
+/**
+ * Fetch all active doctor chats
+ * @route GET /api/chat/my-chats
+ */
 const getMyChats = async (req, res) => {
-
   try {
-
-    const doctor = await Doctor.findOne({
-      user: req.user.id,
-    });
+    const doctor = await Doctor.findOne({ user: req.user.id });
 
     if (!doctor) {
-
       return res.status(404).json({
         success: false,
         message: "Doctor not found",
       });
-
     }
 
     const chats = await Chat.find({
-
       doctor: doctor._id,
-
       status: "doctor",
-
     })
       .populate("patient", "name email phone")
       .sort("-updatedAt");
 
-    res.json({
-
+    return res.json({
       success: true,
-
       chats,
-
     });
-
   } catch (err) {
-
-    res.status(500).json({
-
+    console.error("[GET_MY_CHATS_ERROR]", err);
+    return res.status(500).json({
       success: false,
-
       message: err.message,
-
     });
-
   }
-
 };
 
-// =========================================
-// END CHAT
-// =========================================
-
+/**
+ * End doctor chat session and hand back to AI bot
+ * @route PUT /api/chat/end/:id
+ */
 const endChat = async (req, res) => {
-
   try {
-
-    const doctor = await Doctor.findOne({
-      user: req.user.id,
-    });
+    const doctor = await Doctor.findOne({ user: req.user.id });
 
     if (!doctor) {
-
       return res.status(404).json({
         success: false,
         message: "Doctor not found",
       });
-
     }
 
     const chat = await Chat.findOne({
-
       _id: req.params.id,
-
       doctor: doctor._id,
-
     });
 
     if (!chat) {
-
       return res.status(404).json({
         success: false,
         message: "Chat not found",
       });
-
     }
 
     chat.status = "bot";
@@ -666,14 +475,10 @@ const endChat = async (req, res) => {
     await chat.save();
 
     const systemMessage = await Message.create({
-
       chat: chat._id,
-
       senderType: "system",
-
       message:
         "👨‍⚕️ Doctor has left the conversation. AI Assistant is active again.",
-
     });
 
     req.app
@@ -681,26 +486,17 @@ const endChat = async (req, res) => {
       .to(chat._id.toString())
       .emit("new-message", systemMessage);
 
-    res.json({
-
+    return res.json({
       success: true,
-
       message: "Chat ended",
-
     });
-
   } catch (err) {
-
-    res.status(500).json({
-
+    console.error("[END_CHAT_ERROR]", err);
+    return res.status(500).json({
       success: false,
-
       message: err.message,
-
     });
-
   }
-
 };
 
 module.exports = {

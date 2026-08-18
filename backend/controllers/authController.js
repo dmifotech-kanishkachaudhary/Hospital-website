@@ -1,16 +1,21 @@
-const User = require("../models/User");
-const Appointment = require("../models/Appointment");
-const MedicalReport = require("../models/MedicalReport");
-const { sendLoginOtpEmail } = require("../utils/emailService");
-const LoginAttempt = require("../models/LoginAttempt");
+/**
+ * @file authController.js
+ * @description Authentication and User Management Controller for Patients and Administrators.
+ */
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// ======================================================
-// REGISTER
-// ======================================================
+const User = require("../models/User");
+const Appointment = require("../models/Appointment");
+const MedicalReport = require("../models/MedicalReport");
+const LoginAttempt = require("../models/LoginAttempt");
+const { sendLoginOtpEmail } = require("../utils/emailService");
 
+/**
+ * Register a new user/patient account
+ * @route POST /api/auth/register
+ */
 const register = async (req, res) => {
   try {
     const {
@@ -33,42 +38,30 @@ const register = async (req, res) => {
     } = req.body;
 
     // Check existing user
-    const existingUser = await User.findOne({
-      email,
-    });
-
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({
-        message: "User already exists",
-      });
+      return res.status(400).json({ message: "User already exists" });
     }
 
     // Hash password
-    const hashedPassword = await bcrypt.hash(
-      password,
-      10
-    );
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
     const user = await User.create({
       name,
       email,
       password: hashedPassword,
-
       phone,
       role: "user",
       dateOfBirth,
       gender,
-
       address,
       city,
       state,
       pincode,
-
       emergencyContactName,
       emergencyContactNumber,
       emergencyContactRelationship,
-
       bloodGroup,
       allergies,
       medicalConditions,
@@ -76,7 +69,6 @@ const register = async (req, res) => {
 
     return res.status(201).json({
       message: "User registered successfully",
-
       user: {
         id: user._id,
         name: user.name,
@@ -85,11 +77,7 @@ const register = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(
-      "Registration Error:",
-      error
-    );
-
+    console.error("[AUTH_REGISTER_ERROR]", error);
     return res.status(500).json({
       message: "Registration failed",
       error: error.message,
@@ -97,11 +85,10 @@ const register = async (req, res) => {
   }
 };
 
-
-// ======================================================
-// LOGIN
-// ======================================================
-
+/**
+ * User Login with password verification and rate limiting / brute-force protection
+ * @route POST /api/auth/login
+ */
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -113,10 +100,7 @@ const login = async (req, res) => {
       req.ip;
 
     // Check previous login attempts
-    let loginAttempt = await LoginAttempt.findOne({
-      email,
-      ip,
-    });
+    let loginAttempt = await LoginAttempt.findOne({ email, ip });
 
     // Check if blocked
     if (
@@ -125,43 +109,30 @@ const login = async (req, res) => {
       loginAttempt.blockedUntil > new Date()
     ) {
       return res.status(429).json({
-        message:
-          "Too many failed login attempts. Please try again after 15 minutes.",
+        message: "Too many failed login attempts. Please try again after 15 minutes.",
       });
     }
 
     // Find user
     const user = await User.findOne({ email });
-
     if (!user) {
-      return res.status(401).json({
-        message: "Invalid email or password",
-      });
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
     // Compare password
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
-    // Wrong password
+    // Handle invalid password case
     if (!isPasswordCorrect) {
       if (!loginAttempt) {
-        loginAttempt = new LoginAttempt({
-          email,
-          ip,
-          attempts: 1,
-        });
+        loginAttempt = new LoginAttempt({ email, ip, attempts: 1 });
       } else {
         loginAttempt.attempts += 1;
       }
 
-      // Block after 5 attempts
+      // Block after 5 failed attempts
       if (loginAttempt.attempts >= 5) {
-        loginAttempt.blockedUntil = new Date(
-          Date.now() + 15 * 60 * 1000 // 15 minutes
-        );
+        loginAttempt.blockedUntil = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
       }
 
       await loginAttempt.save();
@@ -170,33 +141,25 @@ const login = async (req, res) => {
         message:
           loginAttempt.attempts >= 5
             ? "Too many failed login attempts. You are blocked for 15 minutes."
-            : `Invalid email or password. ${
-                5 - loginAttempt.attempts
-              } attempt(s) remaining.`,
+            : `Invalid email or password. ${5 - loginAttempt.attempts} attempt(s) remaining.`,
       });
     }
 
-    // Successful login → reset attempts
-    await LoginAttempt.deleteOne({
-      email,
-      ip,
-    });
+    // Successful login -> Reset attempts
+    await LoginAttempt.deleteOne({ email, ip });
 
-    // Generate JWT
+    // Generate JWT Token
     const token = jwt.sign(
-  {
-    id: user._id,
-    role: user.role,
-
-    name: user.name,
-    email: user.email,
-    phone: user.phone,
-  },
-  process.env.JWT_SECRET,
-  {
-    expiresIn: "1d",
-  }
-);
+      {
+        id: user._id,
+        role: user.role,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
 
     return res.status(200).json({
       message: "Login successful",
@@ -205,13 +168,12 @@ const login = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        phone:user.phone,
+        phone: user.phone,
         role: user.role,
       },
     });
   } catch (error) {
-    console.error("Login Error:", error);
-
+    console.error("[AUTH_LOGIN_ERROR]", error);
     return res.status(500).json({
       message: "Login failed",
       error: error.message,
@@ -219,32 +181,24 @@ const login = async (req, res) => {
   }
 };
 
-// ======================================================
-// SEND OTP
-// ======================================================
-
+/**
+ * Send OTP for Passwordless Authentication / Verification
+ * @route POST /api/auth/send-otp
+ */
 const sendOtp = async (req, res) => {
   try {
     const { email } = req.body;
-
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({
-        message: "User not found",
-      });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    const otp = Math.floor(
-      100000 + Math.random() * 900000
-    ).toString();
-
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpHash = await bcrypt.hash(otp, 10);
 
     user.otpHash = otpHash;
-    user.otpExpiresAt = new Date(
-      Date.now() + 5 * 60 * 1000
-    );
+    user.otpExpiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes validity
 
     await user.save();
 
@@ -254,38 +208,24 @@ const sendOtp = async (req, res) => {
       otp,
     });
 
-    return res.status(200).json({
-      message: "OTP sent successfully",
-    });
-
+    return res.status(200).json({ message: "OTP sent successfully" });
   } catch (error) {
-
-    console.error("Send OTP Error:", error);
-
-    return res.status(500).json({
-      message: "Failed to send OTP",
-    });
-
+    console.error("[AUTH_SEND_OTP_ERROR]", error);
+    return res.status(500).json({ message: "Failed to send OTP" });
   }
 };
 
-
-// ======================================================
-// VERIFY OTP
-// ======================================================
-
+/**
+ * Verify OTP and authenticate user
+ * @route POST /api/auth/verify-otp
+ */
 const verifyOtp = async (req, res) => {
-
   try {
-
     const { email, otp } = req.body;
-
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({
-        message: "User not found",
-      });
+      return res.status(404).json({ message: "User not found" });
     }
 
     if (
@@ -293,47 +233,34 @@ const verifyOtp = async (req, res) => {
       !user.otpExpiresAt ||
       user.otpExpiresAt < new Date()
     ) {
-      return res.status(400).json({
-        message: "OTP expired",
-      });
+      return res.status(400).json({ message: "OTP expired" });
     }
 
-    const isValidOtp = await bcrypt.compare(
-      otp,
-      user.otpHash
-    );
-
+    const isValidOtp = await bcrypt.compare(otp, user.otpHash);
     if (!isValidOtp) {
-      return res.status(400).json({
-        message: "Invalid OTP",
-      });
+      return res.status(400).json({ message: "Invalid OTP" });
     }
 
+    // Reset OTP fields upon successful verification
     user.otpHash = null;
     user.otpExpiresAt = null;
-
     await user.save();
 
     const token = jwt.sign(
-  {
-    id: user._id,
-    role: user.role,
-
-    name: user.name,
-    email: user.email,
-    phone: user.phone,
-  },
-  process.env.JWT_SECRET,
-  {
-    expiresIn: "1d",
-  }
-);
+      {
+        id: user._id,
+        role: user.role,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
 
     return res.status(200).json({
       message: "OTP verified successfully",
-
       token,
-
       user: {
         id: user._id,
         name: user.name,
@@ -341,242 +268,121 @@ const verifyOtp = async (req, res) => {
         role: user.role,
       },
     });
-
   } catch (error) {
-
-    console.error(error);
-
-    return res.status(500).json({
-      message: "OTP verification failed",
-    });
-
+    console.error("[AUTH_VERIFY_OTP_ERROR]", error);
+    return res.status(500).json({ message: "OTP verification failed" });
   }
-
 };
 
-
-// ======================================================
-// ADMIN - GET ALL PATIENTS
-// Supports search
-// ======================================================
-
-const getAllPatients = async (
-  req,
-  res
-) => {
+/**
+ * Get list of all registered patients with search filtering (Admin access)
+ * @route GET /api/auth/patients
+ */
+const getAllPatients = async (req, res) => {
   try {
-    const search =
-      req.query.search?.trim() || "";
-
-    let query = {
-      role: "user",
-    };
-
-    // ==================================================
-    // SEARCH
-    // ==================================================
+    const search = req.query.search?.trim() || "";
+    let query = { role: "user" };
 
     if (search) {
-      const searchRegex =
-        new RegExp(search, "i");
-
+      const searchRegex = new RegExp(search, "i");
       query = {
         role: "user",
-
         $or: [
-          {
-            name: searchRegex,
-          },
-
-          {
-            email: searchRegex,
-          },
-
-          {
-            phone: searchRegex,
-          },
-
-          {
-            gender: searchRegex,
-          },
-
-          {
-            bloodGroup: searchRegex,
-          },
-
-          {
-            city: searchRegex,
-          },
-
-          {
-            state: searchRegex,
-          },
-
-          {
-            pincode: searchRegex,
-          },
+          { name: searchRegex },
+          { email: searchRegex },
+          { phone: searchRegex },
+          { gender: searchRegex },
+          { bloodGroup: searchRegex },
+          { city: searchRegex },
+          { state: searchRegex },
+          { pincode: searchRegex },
         ],
       };
 
-      // If search looks like MongoDB ObjectId,
-      // also search by actual patient ID.
-      if (
-        /^[0-9a-fA-F]{24}$/.test(search)
-      ) {
-        query.$or.push({
-          _id: search,
-        });
+      // Search by exact ObjectId if query matches hex pattern
+      if (/^[0-9a-fA-F]{24}$/.test(search)) {
+        query.$or.push({ _id: search });
       }
     }
 
-    const patients =
-      await User.find(query)
-        .select(
-          "-password -otpHash -otpExpiresAt"
-        )
-        .sort({
-          createdAt: -1,
-        });
+    const patients = await User.find(query)
+      .select("-password -otpHash -otpExpiresAt")
+      .sort({ createdAt: -1 });
 
     return res.status(200).json({
-      message:
-        "Patients fetched successfully",
-
+      message: "Patients fetched successfully",
       patients,
     });
   } catch (error) {
-    console.error(
-      "Get Patients Error:",
-      error
-    );
-
+    console.error("[GET_PATIENTS_ERROR]", error);
     return res.status(500).json({
-      message:
-        "Failed to fetch patients",
-
+      message: "Failed to fetch patients",
       error: error.message,
     });
   }
 };
 
-
-// ======================================================
-// ADMIN - GET SINGLE PATIENT
-// Patient + Appointments + Reports
-// ======================================================
-
-const getPatientById = async (
-  req,
-  res
-) => {
+/**
+ * Get single patient details including their appointments and medical reports (Admin access)
+ * @route GET /api/auth/patients/:id
+ */
+const getPatientById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // ==================================================
-    // FIND PATIENT
-    // ==================================================
-
-    const patient =
-      await User.findOne({
-        _id: id,
-        role: "user",
-      }).select(
-        "-password -otpHash -otpExpiresAt"
-      );
+    const patient = await User.findOne({ _id: id, role: "user" }).select(
+      "-password -otpHash -otpExpiresAt"
+    );
 
     if (!patient) {
-      return res.status(404).json({
-        message: "Patient not found",
-      });
+      return res.status(404).json({ message: "Patient not found" });
     }
 
-    // ==================================================
-    // GET APPOINTMENTS
-    // ==================================================
+    const appointments = await Appointment.find({ patient: patient._id })
+      .populate(
+        "doctor",
+        "name email specialization department experience phone availability consultationFee"
+      )
+      .sort({ date: -1, createdAt: -1 });
 
-    const appointments =
-      await Appointment.find({
-        patient: patient._id,
-      })
-        .populate(
-          "doctor",
-          "name email specialization department experience phone availability consultationFee"
-        )
-        .sort({
-          date: -1,
-          createdAt: -1,
-        });
-
-    // ==================================================
-    // GET MEDICAL REPORTS
-    // ==================================================
-
-    const reports =
-      await MedicalReport.find({
-        patient: patient._id,
-      })
-        .sort({
-          createdAt: -1,
-        });
-
-    // ==================================================
-    // RESPONSE
-    // ==================================================
+    const reports = await MedicalReport.find({ patient: patient._id }).sort({
+      createdAt: -1,
+    });
 
     return res.status(200).json({
-      message:
-        "Patient details fetched successfully",
-
+      message: "Patient details fetched successfully",
       patient,
-
       appointments,
-
       reports,
     });
   } catch (error) {
-    console.error(
-      "Get Patient Details Error:",
-      error
-    );
-
+    console.error("[GET_PATIENT_BY_ID_ERROR]", error);
     return res.status(500).json({
-      message:
-        "Failed to fetch patient details",
-
+      message: "Failed to fetch patient details",
       error: error.message,
     });
   }
 };
 
-// ======================================================
-// ADMIN - SECURITY LOGS
-// ======================================================
-
+/**
+ * Get system login attempt logs for security auditing (Admin access)
+ * @route GET /api/auth/security-logs
+ */
 const getSecurityLogs = async (req, res) => {
   try {
-
-    const logs = await LoginAttempt.find()
-      .sort({ updatedAt: -1 });
-
+    const logs = await LoginAttempt.find().sort({ updatedAt: -1 });
     return res.status(200).json({
       message: "Security logs fetched successfully",
       logs,
     });
-
   } catch (error) {
-
+    console.error("[GET_SECURITY_LOGS_ERROR]", error);
     return res.status(500).json({
       message: "Failed to fetch security logs",
       error: error.message,
     });
-
   }
 };
-
-
-// ======================================================
-// EXPORT
-// ======================================================
 
 module.exports = {
   register,

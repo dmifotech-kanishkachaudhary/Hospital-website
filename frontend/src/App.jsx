@@ -1,11 +1,17 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+/**
+ * @file App.jsx
+ * @description Master Application Routing component for Public, Patient, Admin, and Doctor portals.
+ */
 
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
+// Public Pages
 import PublicDashboard from "./pages/public/PublicDashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
+// Patient / User Pages
 import UserDashboard from "./pages/user/UserDashboard";
 import UserAppointments from "./pages/user/Appointments";
 import BookAppointment from "./pages/user/BookAppointment";
@@ -15,6 +21,7 @@ import ReportDetails from "./pages/user/ReportDetails";
 import UploadReport from "./pages/user/UploadReport";
 import Chat from "./pages/user/Chat";
 
+// Admin Pages
 import Patients from "./pages/admin/Patients";
 import PatientDetails from "./pages/admin/PatientDetails";
 import Doctors from "./pages/admin/Doctors";
@@ -23,9 +30,9 @@ import AdminAppointments from "./pages/admin/AdminAppointments";
 import AppointmentDetails from "./pages/admin/AppointmentDetails";
 import AdminReports from "./pages/admin/Reports";
 import AdminReportDetails from "./pages/admin/ReportDetails";
-
 import AdminDashboard from "./pages/admin/AdminDashboard";
 
+// Doctor Portal Pages
 import DoctorLogin from "./pages/doctor/DoctorLogin";
 import DoctorAppointments from "./pages/doctor/DoctorAppointments";
 import DoctorPatients from "./pages/doctor/DoctorPatients";
@@ -38,32 +45,13 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<PublicDashboard />} />
+        <Route path="/public/dashboard" element={<PublicDashboard />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-        {/* PUBLIC */}
-
-        <Route
-          path="/"
-          element={<PublicDashboard />}
-        />
-
-        <Route
-          path="/public/dashboard"
-          element={<PublicDashboard />}
-        />
-
-        <Route
-          path="/login"
-          element={<Login />}
-        />
-
-        <Route
-          path="/register"
-          element={<Register />}
-        />
-
-
-        {/* USER */}
-
+        {/* Patient Routes */}
         <Route
           path="/user/dashboard"
           element={
@@ -72,7 +60,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/user/appointments"
           element={
@@ -81,7 +68,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/user/book-appointment"
           element={
@@ -90,9 +76,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-        
-
         <Route
           path="/user/profile"
           element={
@@ -101,7 +84,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/user/reports"
           element={
@@ -110,7 +92,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/user/reports/:id"
           element={
@@ -119,7 +100,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/user/upload-report"
           element={
@@ -128,7 +108,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/user/chat"
           element={
@@ -138,8 +117,7 @@ function App() {
           }
         />
 
-        {/* ADMIN */}
-
+        {/* Admin Routes */}
         <Route
           path="/admin/dashboard"
           element={
@@ -148,7 +126,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/admin/patients"
           element={
@@ -157,7 +134,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/admin/patients/:id"
           element={
@@ -166,7 +142,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/admin/doctors"
           element={
@@ -175,7 +150,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/admin/doctors/:id"
           element={
@@ -184,7 +158,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/admin/appointments"
           element={
@@ -193,7 +166,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/admin/appointments/:id"
           element={
@@ -202,54 +174,17 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/admin/reports" element={<AdminReports />} />
+        <Route path="/admin/reports/:id" element={<AdminReportDetails />} />
 
-        <Route
-          path="/admin/reports"
-          element={<AdminReports />}
-        />
-
-        <Route
-          path="/admin/reports/:id"
-          element={<AdminReportDetails />}
-        />
-
-        {/* DOCTOR */}
-        
-        <Route
-          path="/doctor/login"
-          element={<DoctorLogin />}
-        />
-
-        <Route
-          path="/doctor/dashboard"
-          element={<DoctorDashboard />}
-        />
-
-        <Route
-          path="/doctor/appointments"
-          element={<DoctorAppointments/>}
-        />
-
-        <Route
-          path="/doctor/patients"
-          element={<DoctorPatients/>}
-        />
-
-        <Route
-          path="/doctor/chat"
-          element={<DoctorChat />}
-        />
-
-        <Route
-          path="/doctor/register"
-          element={<DoctorRegister />}
-      />
-
-      <Route
-  path="/doctor/profile"
-  element={<DoctorProfile />}
-/>
-
+        {/* Doctor Routes */}
+        <Route path="/doctor/login" element={<DoctorLogin />} />
+        <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
+        <Route path="/doctor/appointments" element={<DoctorAppointments />} />
+        <Route path="/doctor/patients" element={<DoctorPatients />} />
+        <Route path="/doctor/chat" element={<DoctorChat />} />
+        <Route path="/doctor/register" element={<DoctorRegister />} />
+        <Route path="/doctor/profile" element={<DoctorProfile />} />
       </Routes>
     </BrowserRouter>
   );

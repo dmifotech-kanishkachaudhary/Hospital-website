@@ -1,3 +1,8 @@
+/**
+ * @file razorpay.js
+ * @description Razorpay payment gateway client instance configuration.
+ */
+
 const Razorpay = require("razorpay");
 
 const razorpay = new Razorpay({

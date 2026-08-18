@@ -1,4 +1,11 @@
+/**
+ * @file appointmentRoutes.js
+ * @description Express routing definitions for appointment creation, retrieval, and status management.
+ */
+
 const express = require("express");
+const protect = require("../middleware/authMiddleware");
+const adminOnly = require("../middleware/adminMiddleware");
 
 const {
   createAppointment,
@@ -8,62 +15,15 @@ const {
   updateAppointmentStatus,
 } = require("../controllers/appointmentController");
 
-const protect = require("../middleware/authMiddleware");
-const adminOnly = require("../middleware/adminMiddleware");
-
 const router = express.Router();
 
-// ======================================================
-// USER - BOOK APPOINTMENT
-// ======================================================
+// User Appointment Routes
+router.post("/", protect, createAppointment);
+router.get("/my", protect, getMyAppointments);
 
-router.post(
-  "/",
-  protect,
-  createAppointment
-);
-
-// ======================================================
-// USER - MY APPOINTMENTS
-// ======================================================
-
-router.get(
-  "/my",
-  protect,
-  getMyAppointments
-);
-
-// ======================================================
-// ADMIN - ALL APPOINTMENTS
-// ======================================================
-
-router.get(
-  "/",
-  protect,
-  adminOnly,
-  getAllAppointments
-);
-
-// ======================================================
-// ADMIN - SINGLE APPOINTMENT
-// ======================================================
-
-router.get(
-  "/:id",
-  protect,
-  adminOnly,
-  getAppointmentById
-);
-
-// ======================================================
-// ADMIN - UPDATE STATUS
-// ======================================================
-
-router.patch(
-  "/:id/status",
-  protect,
-  adminOnly,
-  updateAppointmentStatus
-);
+// Admin Appointment Routes
+router.get("/", protect, adminOnly, getAllAppointments);
+router.get("/:id", protect, adminOnly, getAppointmentById);
+router.patch("/:id/status", protect, adminOnly, updateAppointmentStatus);
 
 module.exports = router;

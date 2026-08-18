@@ -1,11 +1,19 @@
+/**
+ * @file aiController.js
+ * @description Google Gemini AI service controller for analyzing medical laboratory reports.
+ */
+
 const { GoogleGenAI } = require("@google/genai");
 
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
 
-
-// Reusable Gemini function
+/**
+ * Core helper function to send medical report text to Gemini and receive structured JSON response.
+ * @param {string} reportText - Extracted text content of medical report PDF
+ * @returns {Promise<string>} Gemini response text string
+ */
 const generateReportAnalysis = async (reportText) => {
   const prompt = `
 You are an experienced medical report explanation assistant for a hospital management system.
@@ -59,35 +67,32 @@ Instructions:
   return response.text;
 };
 
-
-// Existing AI API
+/**
+ * Controller endpoint to execute AI analysis directly from API request
+ * @route POST /api/ai/analyze
+ */
 const analyzeReport = async (req, res) => {
   try {
     const { reportText } = req.body;
 
     if (!reportText) {
-      return res.status(400).json({
-        message: "Report text is required",
-      });
+      return res.status(400).json({ message: "Report text is required" });
     }
 
     const analysis = await generateReportAnalysis(reportText);
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Report analyzed successfully",
       analysis,
     });
-
   } catch (error) {
-    console.error("Gemini Error:", error);
-
-    res.status(500).json({
+    console.error("[AI_ANALYSIS_ERROR]", error);
+    return res.status(500).json({
       message: "AI analysis failed",
       error: error.message,
     });
   }
 };
-
 
 module.exports = {
   analyzeReport,
